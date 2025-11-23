@@ -28,14 +28,16 @@ const DateFilter = () => {
     }
   };
 
+  // Removed mt: 2 because it is now in a header row
   return (
-    <Box sx={{ display: 'flex', gap: 2, mt: 2, alignItems: 'center' }}>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
       <FormControl sx={{ minWidth: 120 }}>
         <InputLabel>Date Filter</InputLabel>
         <Select
           value={filterType}
           label="Date Filter"
           onChange={handleFilterChange}
+          size="small"
         >
           <MenuItem value="all">All Time</MenuItem>
           <MenuItem value="today">Today</MenuItem>
@@ -58,7 +60,7 @@ const DateFilter = () => {
               customInput={
                 <Box
                     sx={{
-                        padding: '16.5px 14px',
+                        padding: '8.5px 14px', // Adjusted for small size to match Select size="small" roughly
                         border: '1px solid rgba(0, 0, 0, 0.23)',
                         borderRadius: '4px',
                         '&:hover': {
