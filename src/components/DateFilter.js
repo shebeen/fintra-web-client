@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
-import { TextField } from '@mui/material';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import { useTrades } from '../context/TradeContext';
 
 const DateFilter = () => {
   const { setDateFilter } = useTrades();
   const [filterType, setFilterType] = useState('all');
   const [customDateRange, setCustomDateRange] = useState([null, null]);
+  const [startDate, endDate] = customDateRange;
 
   const handleFilterChange = (event) => {
     const newFilterType = event.target.value;
@@ -20,13 +19,16 @@ const DateFilter = () => {
     }
   };
 
-  const handleDateRangeChange = (newRange) => {
-    setCustomDateRange(newRange);
-    setDateFilter({ type: 'custom', range: newRange });
+  const handleDateRangeChange = (update) => {
+    setCustomDateRange(update);
+    // react-datepicker's onChange passes the range as [start, end] when selectsRange is true
+    // We update the context only if we have a valid range or part of it, depending on desired behavior.
+    // The context expects { type: 'custom', range: newRange }
+    setDateFilter({ type: 'custom', range: update });
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+    <Box sx={{ display: 'flex', gap: 2, mt: 2, alignItems: 'center' }}>
       <FormControl sx={{ minWidth: 120 }}>
         <InputLabel>Date Filter</InputLabel>
         <Select
@@ -43,21 +45,32 @@ const DateFilter = () => {
         </Select>
       </FormControl>
       {filterType === 'custom' && (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DateRangePicker
-            startText="Start Date"
-            endText="End Date"
-            value={customDateRange}
-            onChange={handleDateRangeChange}
-            renderInput={(startProps, endProps) => (
-              <React.Fragment>
-                <TextField {...startProps} />
-                <Box sx={{ mx: 2 }}> to </Box>
-                <TextField {...endProps} />
-              </React.Fragment>
-            )}
-          />
-        </LocalizationProvider>
+        <Box sx={{ '.react-datepicker-wrapper': { width: 'auto' } }}>
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={handleDateRangeChange}
+              isClearable={true}
+              placeholderText="Start Date - End Date"
+              className="custom-datepicker"
+              customInput={
+                <Box
+                    sx={{
+                        padding: '16.5px 14px',
+                        border: '1px solid rgba(0, 0, 0, 0.23)',
+                        borderRadius: '4px',
+                        '&:hover': {
+                            borderColor: 'rgba(0, 0, 0, 0.87)'
+                        },
+                        cursor: 'text',
+                        width: '250px'
+                    }}
+                    component="input"
+                />
+              }
+            />
+        </Box>
       )}
     </Box>
   );
