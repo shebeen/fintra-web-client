@@ -79,10 +79,10 @@ export const TradeProvider = ({ children }) => {
       let url = `${API_BASE_URL}/trades`;
       const params = [];
       if (startDate) {
-        params.push(`startDate=${format(startDate, 'yyyy-MM-dd')}`);
+        params.push(`from_date=${format(startDate, 'yyyy-MM-dd')}`);
       }
       if (endDate) {
-        params.push(`endDate=${format(endDate, 'yyyy-MM-dd')}`);
+        params.push(`to_date=${format(endDate, 'yyyy-MM-dd')}`);
       }
 
       if (params.length > 0) {

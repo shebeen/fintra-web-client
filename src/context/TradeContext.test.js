@@ -45,13 +45,13 @@ describe('TradeContext Backend Filtering', () => {
 
     const now = new Date();
     const expectedStart = format(now, 'yyyy-MM-dd');
-    const expectedEnd = format(now, 'yyyy-MM-dd'); // Assuming today filter is single day or start=today, end=today
+    // For Today, start is today, end is today (based on implementation)
 
     await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(2));
-    // The implementation might append query params
+
     const callArgs = axios.get.mock.calls[1][0];
-    expect(callArgs).toContain('startDate=' + expectedStart);
-    // endDate might be optional or set to today. We'll check based on implementation plan.
+    expect(callArgs).toContain('from_date=' + expectedStart);
+    // to_date might be optional or set to today.
   });
 
   test('fetches trades with custom range', async () => {
@@ -69,7 +69,7 @@ describe('TradeContext Backend Filtering', () => {
 
     await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(2));
     const callArgs = axios.get.mock.calls[1][0];
-    expect(callArgs).toContain('startDate=2023-01-01');
-    expect(callArgs).toContain('endDate=2023-01-31');
+    expect(callArgs).toContain('from_date=2023-01-01');
+    expect(callArgs).toContain('to_date=2023-01-31');
   });
 });
