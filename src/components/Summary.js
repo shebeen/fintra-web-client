@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paper, Typography, Grid, Box } from '@mui/material';
 import { useTrades } from '../context/TradeContext';
+import DateFilter from './DateFilter';
 
 const Summary = () => {
   const { trades } = useTrades();
@@ -12,9 +13,12 @@ const Summary = () => {
 
   return (
     <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
-      <Typography variant="h5" gutterBottom>
-        Overall Profit/Loss
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h5">
+          Overall Profit/Loss
+        </Typography>
+        <DateFilter />
+      </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 4 }}>

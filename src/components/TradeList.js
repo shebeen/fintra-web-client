@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, useTheme, useMediaQuery, Dialog, DialogTitle, DialogActions, Button, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, useTheme, useMediaQuery, Dialog, DialogTitle, DialogActions, Button, Typography, alpha } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTrades } from '../context/TradeContext';
@@ -62,8 +62,18 @@ const TradeList = () => {
           <TableBody>
             {trades.map((trade) => {
               const profitOrLoss = calculateProfitOrLoss(trade);
+              // Determine row background color based on profit/loss
+              let rowSx = {};
+              if (trade.sellPrice) {
+                 if (profitOrLoss >= 0) {
+                     rowSx = { backgroundColor: alpha(theme.palette.success.main, 0.1) };
+                 } else {
+                     rowSx = { backgroundColor: alpha(theme.palette.error.main, 0.1) };
+                 }
+              }
+
               return (
-                <TableRow key={trade.id}>
+                <TableRow key={trade.id} sx={rowSx}>
                   <TableCell>{trade.ticker}</TableCell>
                   {!isMobile && <TableCell>₹{trade.buyPrice.toFixed(2)}</TableCell>}
                   {!isMobile && <TableCell>{trade.sellPrice ? `₹${trade.sellPrice.toFixed(2)}` : 'N/A'}</TableCell>}
@@ -71,9 +81,11 @@ const TradeList = () => {
                   {!isMobile && <TableCell>{trade.tradeDate}</TableCell>}
                   {!isMobile && (
                     <TableCell>
-                      <Typography color={profitOrLoss >= 0 ? 'success.main' : 'error.main'}>
-                        ₹{profitOrLoss.toFixed(2)}
-                      </Typography>
+                       {trade.sellPrice ? (
+                         <Typography color={profitOrLoss >= 0 ? 'success.main' : 'error.main'}>
+                            ₹{profitOrLoss.toFixed(2)}
+                         </Typography>
+                       ) : 'N/A'}
                     </TableCell>
                   )}
                   <TableCell>

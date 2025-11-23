@@ -50,7 +50,7 @@ export const TradeProvider = ({ children }) => {
         startDate = new Date(); // Today
         break;
       case 'this_week':
-        startDate = startOfWeek(now);
+        startDate = startOfWeek(now, { weekStartsOn: 1 });
         break;
       case 'this_month':
         startDate = startOfMonth(now);

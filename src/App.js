@@ -4,7 +4,6 @@ import Header from './components/Header';
 import Summary from './components/Summary';
 import TradeList from './components/TradeList';
 import TradeForm from './components/TradeForm';
-import DateFilter from './components/DateFilter';
 import { useTrades } from './context/TradeContext';
 
 function App() {
@@ -24,8 +23,7 @@ function App() {
       <Header />
       <Container>
         <Summary />
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <DateFilter />
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <Button variant="contained" onClick={handleOpenForm}>
             Add Trade
           </Button>
