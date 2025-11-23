@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, useTheme, useMediaQuery, Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, useTheme, useMediaQuery, Dialog, DialogTitle, DialogActions, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTrades } from '../context/TradeContext';
@@ -37,6 +37,13 @@ const TradeList = () => {
     setEditingTrade(null);
   };
 
+  const calculateProfitOrLoss = (trade) => {
+    if (!trade.sellPrice) {
+      return 0;
+    }
+    return (trade.sellPrice - trade.buyPrice) * trade.quantity;
+  };
+
   return (
     <>
       <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -48,27 +55,38 @@ const TradeList = () => {
               {!isMobile && <TableCell>Sell Price</TableCell>}
               <TableCell>Quantity</TableCell>
               {!isMobile && <TableCell>Trade Date</TableCell>}
+              {!isMobile && <TableCell>Profit/Loss</TableCell>}
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {trades.map((trade) => (
-              <TableRow key={trade.id}>
-                <TableCell>{trade.ticker}</TableCell>
-                {!isMobile && <TableCell>${trade.buyPrice.toFixed(2)}</TableCell>}
-                {!isMobile && <TableCell>{trade.sellPrice ? `$${trade.sellPrice.toFixed(2)}` : 'N/A'}</TableCell>}
-                <TableCell>{trade.quantity}</TableCell>
-                {!isMobile && <TableCell>{trade.tradeDate}</TableCell>}
-                <TableCell>
-                  <IconButton onClick={() => handleEdit(trade)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDeleteClick(trade.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {trades.map((trade) => {
+              const profitOrLoss = calculateProfitOrLoss(trade);
+              return (
+                <TableRow key={trade.id}>
+                  <TableCell>{trade.ticker}</TableCell>
+                  {!isMobile && <TableCell>₹{trade.buyPrice.toFixed(2)}</TableCell>}
+                  {!isMobile && <TableCell>{trade.sellPrice ? `₹${trade.sellPrice.toFixed(2)}` : 'N/A'}</TableCell>}
+                  <TableCell>{trade.quantity}</TableCell>
+                  {!isMobile && <TableCell>{trade.tradeDate}</TableCell>}
+                  {!isMobile && (
+                    <TableCell>
+                      <Typography color={profitOrLoss >= 0 ? 'success.main' : 'error.main'}>
+                        ₹{profitOrLoss.toFixed(2)}
+                      </Typography>
+                    </TableCell>
+                  )}
+                  <TableCell>
+                    <IconButton onClick={() => handleEdit(trade)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDeleteClick(trade.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
