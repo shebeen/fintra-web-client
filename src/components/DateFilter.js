@@ -22,9 +22,10 @@ const DateFilter = () => {
   const handleDateRangeChange = (update) => {
     setCustomDateRange(update);
     // react-datepicker's onChange passes the range as [start, end] when selectsRange is true
-    // We update the context only if we have a valid range or part of it, depending on desired behavior.
-    // The context expects { type: 'custom', range: newRange }
-    setDateFilter({ type: 'custom', range: update });
+    // Only update context if both start and end dates are selected, or if cleared (both null)
+    if ((update[0] && update[1]) || (!update[0] && !update[1])) {
+       setDateFilter({ type: 'custom', range: update });
+    }
   };
 
   return (
