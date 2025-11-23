@@ -5,8 +5,9 @@ import { useTrades } from '../context/TradeContext';
 const Summary = () => {
   const { trades } = useTrades();
 
-  const totalBuyValue = trades.reduce((acc, trade) => acc + trade.buyPrice * trade.quantity, 0);
-  const totalSellValue = trades.reduce((acc, trade) => acc + trade.sellPrice * trade.quantity, 0);
+  const soldTrades = trades.filter(trade => trade.sellPrice);
+  const totalBuyValue = soldTrades.reduce((acc, trade) => acc + trade.buyPrice * trade.quantity, 0);
+  const totalSellValue = soldTrades.reduce((acc, trade) => acc + trade.sellPrice * trade.quantity, 0);
   const profitOrLoss = totalSellValue - totalBuyValue;
 
   return (
