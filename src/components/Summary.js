@@ -17,18 +17,18 @@ const Summary = () => {
       </Typography>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Typography variant="body1">Total Buy Value:</Typography>
-            <Typography variant="h6">${totalBuyValue.toFixed(2)}</Typography>
+            <Typography variant="h6">₹{totalBuyValue.toFixed(2)}</Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Typography variant="body1">Total Sell Value:</Typography>
-            <Typography variant="h6">${totalSellValue.toFixed(2)}</Typography>
+            <Typography variant="h6">₹{totalSellValue.toFixed(2)}</Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Typography variant="body1">Profit/Loss:</Typography>
             <Typography variant="h6" color={profitOrLoss >= 0 ? 'success.main' : 'error.main'}>
-              ${profitOrLoss.toFixed(2)}
+              ₹{profitOrLoss.toFixed(2)}
             </Typography>
           </Grid>
         </Grid>
