@@ -1,13 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import App from './App';
-import { TradeProvider } from './context/TradeContext';
 
-test('renders the summary title', () => {
+// We need to mock AuthContext to simulate a logged-in user if we want to see the Dashboard
+// OR we can test that it redirects to Login.
+
+test('renders login page when not authenticated', () => {
   render(
-    <TradeProvider>
+    <MemoryRouter initialEntries={['/']}>
       <App />
-    </TradeProvider>
+    </MemoryRouter>
   );
-  const titleElement = screen.getByText(/Overall Profit\/Loss/i);
-  expect(titleElement).toBeInTheDocument();
+  // Should redirect to /login, so we should see "Login" text or "Sign In" button
+  const loginTitle = screen.getByRole('heading', { name: /Login/i });
+  expect(loginTitle).toBeInTheDocument();
 });

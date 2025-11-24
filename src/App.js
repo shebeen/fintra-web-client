@@ -1,39 +1,41 @@
-import React, { useState } from 'react';
-import { Container, Button, Box, Typography } from '@mui/material';
-import Header from './components/Header';
-import Summary from './components/Summary';
-import TradeList from './components/TradeList';
-import TradeForm from './components/TradeForm';
-import { useTrades } from './context/TradeContext';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { TradeProvider } from './context/TradeContext';
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
 
 function App() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const { loading, error } = useTrades();
-
-  const handleOpenForm = () => {
-    setIsFormOpen(true);
-  };
-
-  const handleCloseForm = () => {
-    setIsFormOpen(false);
-  };
-
   return (
-    <div>
-      <Header />
-      <Container>
-        <Summary />
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Button variant="contained" onClick={handleOpenForm}>
-            Add Trade
-          </Button>
-        </Box>
-        {loading && <Typography>Loading...</Typography>}
-        {error && <Typography color="error">{error}</Typography>}
-        <TradeList />
-        <TradeForm open={isFormOpen} handleClose={handleCloseForm} />
-      </Container>
-    </div>
+    <AuthProvider>
+      <TradeProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </TradeProvider>
+    </AuthProvider>
   );
 }
 
